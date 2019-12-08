@@ -31,6 +31,7 @@ def main():
     # enter endless loop to check file for volume updates
     while True:
         volume = get_volume_from_file()
+        # todo - some times I see a "update: ", as if the new volume was empty? Error check somehwere...
         if volume != current_volume:
             current_volume = volume
             print('update: ' + volume)
