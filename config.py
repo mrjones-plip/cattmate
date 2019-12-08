@@ -8,4 +8,4 @@ prototypical_data['thumb'] = None
 datafile = './cattmate.json'
 datafile_lock = './cattmate.json_lock'
 
-refresh_wait = 0.01
+refresh_wait = 0.0001

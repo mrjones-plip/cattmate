@@ -1,4 +1,7 @@
-import json, argparse, config
+import argparse
+import config
+import json
+
 from filelock import FileLock
 
 parser = argparse.ArgumentParser()
@@ -16,8 +19,10 @@ def RepresentsInt(s):
 
 
 def main():
-    with open(config.datafile) as json_file:
-        data = json.load(json_file)
+    lock = FileLock(config.datafile_lock)
+    with lock:
+        raw_json = open(config.datafile, "r")
+        data = json.load(raw_json)
 
     if args.volume == 'up' and data['volume'] < 100:
         data['volume'] = data['volume'] + 1

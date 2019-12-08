@@ -19,9 +19,11 @@ def main():
         create_data_file()
 
     try:
-        with open(config.datafile) as json_file:
-            data = json.load(json_file)
-    except TypeError as error:
+        lock = FileLock(config.datafile_lock)
+        with lock:
+            raw_json = open(config.datafile, "r")
+            data = json.load(raw_json)
+    except TypeError:
         create_data_file()
         data = config.prototypical_data
 
@@ -30,8 +32,10 @@ def main():
     print('start: ' + str(current_volume))
 
     while True:
-        with open(config.datafile) as json_file:
-            data = json.load(json_file)
+        lock = FileLock(config.datafile_lock)
+        with lock:
+            raw_json = open(config.datafile, "r")
+            data = json.load(raw_json)
 
         if data['volume'] != current_volume:
             current_volume = data['volume']
