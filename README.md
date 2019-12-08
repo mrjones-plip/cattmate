@@ -17,7 +17,7 @@ use unless you're looking to learn and experiement like am right now ;)
    * [virtualenv](https://virtualenv.pypa.io/en/stable/) 
 1. Clone this repo `git clone https://github.com/Ths2-9Y-LqJt6/cattmate.git`
 1. Change directories to cattmate `cd cattmate`
-1. Create your own virtualenv and activate it `virtualenv venv;. venv/bin/activate` (_optional_)
+1. Create your own virtualenv and activate it `python3 -m venv venv;. venv/bin/activate` (_optional_)
 1. Install all the python prerequesites with `pip install -r requirements.txt`
 1. Edit `powermate.toml` with the paths to python3 and powermate binary for the four
 `*_command` commands

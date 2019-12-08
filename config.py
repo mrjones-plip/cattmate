@@ -6,6 +6,9 @@ prototypical_data['artist'] = None
 prototypical_data['thumb'] = None
 
 datafile = './cattmate.json'
-datafile_lock = './cattmate.json_lock'
+datafile_lock = './.cattmate.json.lock'
 
-refresh_wait = 0.0001
+volumefile = './volume.txt'
+volumefile_lock = './.volume.txt.lock'
+
+refresh_wait = 0.01
