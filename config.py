@@ -5,7 +5,7 @@ prototypical_data['album'] = None
 prototypical_data['artist'] = None
 prototypical_data['thumb'] = None
 
-datafile = './castmate.json'
-datafile_lock = './castmate.json_lock'
+datafile = './cattmate.json'
+datafile_lock = './cattmate.json_lock'
 
-refresh_wait = 0.05
+refresh_wait = 0.01

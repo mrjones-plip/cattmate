@@ -6,6 +6,20 @@ the awesome python Chromecast controlling library [catt](https://github.com/skor
 using the equally awesome [powermate-linux](https://github.com/stefansundin/powermate-linux)
  app.
 
-## Current
+**Note** - This project is very much a work in progress. It is not fully functional yet! Don't 
+use unless you're looking to learn and experiement like am right now ;)   
 
-Currently this is just my testing area as I build out a functional prototype.
+## Install
+
+1. Make sure the following requirements are installed:
+   * [powermatte-linux](https://github.com/stefansundin/powermate-linux)
+   * [pip](https://pip.pypa.io/en/stable/installing/)
+   * [virtualenv](https://virtualenv.pypa.io/en/stable/) 
+1. Clone this repo `git clone https://github.com/Ths2-9Y-LqJt6/cattmate.git`
+1. Change directories to cattmate `cd cattmate`
+1. Create your own virtualenv and activate it `virtualenv venv;. venv/bin/activate` (_optional_)
+1. Install all the python prerequesites with `pip install -r requirements.txt`
+1. Edit `powermate.toml` with the paths to python3 and powermate binary for the four
+`*_command` commands
+1. Start the cattmate controller `python3 cattmate.py` and start the powermatte-linux software
+specifying the config file you edited above: `/usr/bin/powermate -c powermate.toml`
