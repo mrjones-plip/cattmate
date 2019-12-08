@@ -39,5 +39,6 @@ def main():
         # wait a certain amount of time so we don't over load the system with file reads
         time.sleep(config.refresh_wait)
 
+
 if __name__ == "__main__":
     main()
