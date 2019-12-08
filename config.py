@@ -8,4 +8,4 @@ prototypical_data['thumb'] = None
 datafile = './castmate.json'
 datafile_lock = './castmate.json_lock'
 
-refresh_wait = 0.1
+refresh_wait = 0.05
