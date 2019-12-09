@@ -19,7 +19,7 @@ use unless you're looking to learn and experiement like am right now ;)
 1. Change directories to cattmate `cd cattmate`
 1. Create your own virtualenv and activate it `python3 -m venv venv;. venv/bin/activate` (_optional_)
 1. Install all the python prerequesites with `pip install -r requirements.txt`
-1. Create your own config file `cp config.dist.py` and edit `config.dist` with the names
-of the chromecasts you want to use
+1. Create your own config file `cp config.dist.py` and edit `config.dist` with the names or IPs
+of the chromecasts you want to use (ony first one supported right now....)
 1. Start the cattmate controller `python3 cattmate.py` and start the powermatte-linux software
 specifying the config file you edited above: `/usr/bin/powermate -c powermate.toml`
