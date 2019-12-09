@@ -15,8 +15,8 @@ p = 2.0
 
 # Custom commands (will disable default behavior).
 # Set to an empty string to disable the default behavior without executing a custom command.
-knob_command = "./setVolume.sh " # Default: mute/unmute
-long_press_command = "./setVolume.sh zero" # Default: toggle movie mode (disables the LED)
+knob_command = "./setVolume.sh zero" # Default: mute/unmute
+long_press_command = "echo not implemented yet" # Default: toggle movie mode (disables the LED)
 clock_wise_command = "./setVolume.sh up" # Default: increases the volume by p%
 counter_clock_wise_command = "./setVolume.sh down" # Default: decreases the volume by p%
 
