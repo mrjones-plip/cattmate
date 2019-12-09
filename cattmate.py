@@ -1,5 +1,5 @@
 import time, cattmate_config, config
-from catt.api import CattDevice
+import catt.api as cat_api
 from filelock import FileLock
 
 
@@ -13,7 +13,7 @@ def get_volume_from_file():
 def create_volume_file():
     lock = FileLock(cattmate_config.volumefile_lock, timeout=1)
     with lock:
-        open(cattmate_config.volumefile, "w").write('10')
+        open(cattmate_config.volumefile, "w").write(cattmate_config.prototypical_data['volume'])
 
 
 # thanks https://stackoverflow.com/a/5998359
@@ -27,23 +27,21 @@ def main():
         volume = get_volume_from_file()
     except TypeError:
         create_volume_file()
-        volume = '10'
+        volume = cattmate_config.prototypical_data['volume']
 
     # remember current volume and let use know we're starting
     current_volume = volume
     last_volume_update = milli_time()
     need_update = False
+
     print('Trying to start with: ' + str(config.chromecasts[0]))
-
-    cast = CattDevice(name=config.chromecasts[0])
-
+    cast = cat_api.CattDevice(name=config.chromecasts[0])
     print('start: ' + current_volume)
 
     # enter endless loop to check file for volume updates
     while True:
         volume = get_volume_from_file()
-        # todo - some times I see a "update: ", as if the new volume was empty? Error check somehwere...
-        if volume != current_volume:
+        if volume != current_volume and volume:
             current_volume = volume
             last_volume_update = milli_time()
             need_update = True
@@ -54,6 +52,7 @@ def main():
             need_update = False
             cast_volume = int(volume)/100;
             cast.volume(cast_volume)
+
             print('send vol update: ' + str(cast_volume))
 
         # wait a certain amount of time so we don't over load the system with file reads
