@@ -1,4 +1,4 @@
-# Castmate
+# Cattmate
 
 A WiFi enabled physical volume knob for Chromecasts via a mash up of Griffin's no longer made USB device the 
 [PowerMate](https://support.griffintechnology.com/product/powermate/) and
