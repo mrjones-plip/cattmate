@@ -13,8 +13,15 @@ can kinda make out Google Home update as well:
 
 ![](./demo3.gif)
 
-**Note** - This project is very much a work in progress. It is not fully functional yet! Don't 
-use unless you're looking to learn and experiement like am right now ;)   
+## Status   
+
+This project is very much a work in progress. Don't 
+use unless you're looking to learn and experiment like am right now ;)
+
+Currently it seems pretty stable when not using the screen.  This is the default
+in the config (`use_display = False`).
+
+When using the screen I see this error which I need to chase down per #1
 
 ## Hardware
 
@@ -26,6 +33,11 @@ use unless you're looking to learn and experiement like am right now ;)
 
 ## Install
 
+These steps assume you have your Pi set up with Raspbian, that it's booted up, connected
+to the same WiFi as your Chromecast and that the PowerMate is plugged into one of the Pi's 
+USB ports. If your Chromecast is on a different network, but you can get to it by IP, the
+config supports IPs instead of Chromecast names. 
+
 1. Make sure the following requirements are installed:
    * [powermatte-linux](https://github.com/stefansundin/powermate-linux)
    * [pip](https://pip.pypa.io/en/stable/installing/)
@@ -33,9 +45,9 @@ use unless you're looking to learn and experiement like am right now ;)
 1. Clone this repo `git clone https://github.com/Ths2-9Y-LqJt6/cattmate.git`
 1. Change directories to cattmate `cd cattmate`
 1. Create your own virtualenv and activate it `python3 -m venv venv;. venv/bin/activate` (_optional_)
-1. Install all the python prerequesites with `pip install -r requirements.txt`
+1. Install all the python prerequisites with `pip install -r requirements.txt`
 1. Create your own config file `cp config.dist.py` and edit `config.dist` with the names or IPs
 of the chromecasts you want to use (ony first one supported right now ;) and whether you want
 to use an external I2C screen or not
 1. Start the cattmate controller `python3 cattmate.py` and start the powermatte-linux software
-specifying the config file you edited above: `/usr/bin/powermate -c powermate.toml`
+specifying the config included in this repo: `/usr/bin/powermate -c powermate.toml`
