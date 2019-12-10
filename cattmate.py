@@ -1,4 +1,4 @@
-import time, cattmate_config, config, socket, sys, ssd1306, logging
+import time, cattmate_config, config, socket, sys, Ssd1306, logging
 from os import system
 import catt.api as cat_api
 from filelock import FileLock
@@ -40,13 +40,13 @@ def main():
     if config.use_display:
         print('Trying to initialize screen on bus /dev/i2c-' + str(config.display_bus))
         try:
-            screen = ssd1306.get_display_handle();
+            screen = Ssd1306.Ssd1306(config.display_bus, config.font_size)
         except FileNotFoundError as e:
             exit('ERROR Could not access screen. Wrong I2C buss specified? Using /dev/i2c-' + str(config.display_bus))
         except Exception as e:
             # todo - where does this logging go? what other errors could end up here?
             logging.exception(e)
-            exit('ERROR Could not access screen: ' + str(e.__cause__))
+            exit('ERROR Could not access screen: ' + str(e))
     
     # make sure we have a good file and volume
     try:
@@ -55,13 +55,12 @@ def main():
         create_volume_file()
         volume = cattmate_config.prototypical_data['volume']
 
-    # remember current volume and let use know we're starting
+    # remember current volume and let user know we're starting
     current_volume = volume
     last_volume_update = milli_time()
     need_update = False
-
-    # todo - check for IPv6 too socket.inet_pton(socket.AF_INET6, some_string)
     print('Trying to start with: ' + str(config.chromecasts[0]))
+
     try:
         cast = get_cast_handle(config.chromecasts[0])
     except cat_api.CastError:
@@ -73,8 +72,8 @@ def main():
     _ = system('clear')
 
     if config.use_display:
-        # todo - put try/except around this & retry? - have seen "OSError: [Errno 121] Remote I/O error"
-        ssd1306.display(screen, str(current_volume), 55, True)
+        screen.display(current_volume, True)
+
     print(current_volume)
 
     # enter endless loop to check file for volume updates
@@ -89,8 +88,7 @@ def main():
             last_volume_update = milli_time()
             need_update = True
             if config.use_display:
-                # todo - put try/except around this & retry? - have seen "OSError: [Errno 121] Remote I/O error"
-                ssd1306.display(screen, str(current_volume), config.font_size)
+                screen.display(current_volume)
             _ = system('clear')
             print(volume)
 
@@ -101,12 +99,10 @@ def main():
             print('send vol update: ' + str(current_volume))
 
             if config.use_display:
-                # todo - put try/except around this & retry? - have seen "OSError: [Errno 121] Remote I/O error"
-                ssd1306.display(screen, str(current_volume) + ' ;)', config.font_size)
-
-                time.sleep(.5)
-                # todo - put try/except around this & retry? - have seen "OSError: [Errno 121] Remote I/O error"
-                ssd1306.display(screen, str(current_volume), config.font_size)
+                time.sleep(cattmate_config.refresh_wait)
+                screen.display(current_volume + ' ;)')
+                time.sleep(cattmate_config.refresh_wait)
+                screen.display(current_volume)
 
         # wait a certain amount of time so we don't over load the system with file reads
         time.sleep(cattmate_config.refresh_wait)

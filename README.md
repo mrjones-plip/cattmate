@@ -55,5 +55,7 @@ specifying the config included in this repo: `/usr/bin/powermate -c powermate.to
 
 # Releases
 
+* 10 Dec 2019 v0.11 - refactor `ssd1306` lib  to `Csd1306` class, simplify calls to same, 
+refactor for cleaner code 
 * 10 Dec 2019 v0.10 - first decently functional code, known issue 
 in [#1](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/1) though.
