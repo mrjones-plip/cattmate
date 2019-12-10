@@ -5,11 +5,20 @@ VOLUME=`cat volume.txt`
 
 if [ $ACTION = 'up' ];then
   VOLUME=$((VOLUME+1))
-  echo $VOLUME  > volume.txt
+  if [ $VOLUME -gt 100 ];then
+    VOLUME=101
+  fi
+
 elif [ $ACTION = 'down' ];then
   VOLUME=$((VOLUME-1))
-  echo $VOLUME  > volume.txt
+  if [ $VOLUME -lt 0 ];then
+    VOLUME=-1
+  fi
+
 elif [ $ACTION = 'zero' ];then
-  echo 0 > volume.txt
+  VOLUME=0
+
 fi
+
+echo $VOLUME  > volume.txt
 
