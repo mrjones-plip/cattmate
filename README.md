@@ -11,7 +11,7 @@ Here's the current demo in an animated gif.  Behind the PowerMate is a Chromeboo
 Google Home app.  When the Cattmate sets the volume it shows a smiley face on the screen and you 
 can kinda make out Google Home update as well:
 
-![](./demo.gif)
+![](./demo2.gif)
 
 **Note** - This project is very much a work in progress. It is not fully functional yet! Don't 
 use unless you're looking to learn and experiement like am right now ;)   
