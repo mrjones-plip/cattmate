@@ -21,7 +21,8 @@ use unless you're looking to learn and experiment like am right now ;)
 Currently it seems pretty stable when not using the screen.  This is the default
 in the config (`use_display = False`).
 
-When using the screen I see this error which I need to chase down per #1
+When using the screen I see this error which I need to chase down per 
+[#1](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/1)
 
 ## Hardware
 
@@ -51,3 +52,8 @@ of the chromecasts you want to use (ony first one supported right now ;) and whe
 to use an external I2C screen or not
 1. Start the cattmate controller `python3 cattmate.py` and start the powermatte-linux software
 specifying the config included in this repo: `/usr/bin/powermate -c powermate.toml`
+
+# Releases
+
+* 10 Dec 2019 v0.10 - first decently functional code, known issue 
+in [#1](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/1) though.
