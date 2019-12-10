@@ -66,11 +66,11 @@ def main():
     except cat_api.CastError:
         sys.exit("ERROR: Couldn't connect to '" + config.chromecasts[0] + "'. Check config.py and name/IP.")
 
-    # we're all loaded up, let 'em know
+    # Success! let user know and wait 1 sec so they can read it before we clearing screen
     print('Started!')
     time.sleep(1)
-
     _ = system('clear')
+
     # todo - put try/except around this & retry? - have seen "OSError: [Errno 121] Remote I/O error"
     ssd1306.display(screen, str(current_volume), 55, True)
     print(current_volume)

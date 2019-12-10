@@ -1,12 +1,17 @@
 # Cattmate
 
-![](./demo.gif)
 
 A WiFi enabled physical volume knob for Chromecasts via a mash up of Griffin's no longer made USB device the 
 [PowerMate](https://support.griffintechnology.com/product/powermate/) and
 the awesome python Chromecast controlling library [catt](https://github.com/skorokithakis/catt/)
 using the equally awesome [powermate-linux](https://github.com/stefansundin/powermate-linux)
  app.
+
+Here's the current demo in an animated gif.  Behind the PowerMate is a Chromebook running the
+Google Home app.  When the Cattmate sets the volume it shows a smiley face on the screen and you 
+can kinda make out Google Home update as well:
+
+![](./demo.gif)
 
 **Note** - This project is very much a work in progress. It is not fully functional yet! Don't 
 use unless you're looking to learn and experiement like am right now ;)   
