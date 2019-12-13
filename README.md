@@ -18,11 +18,9 @@ can kinda make out Google Home update as well:
 This project is very much a work in progress. Don't 
 use unless you're looking to learn and experiment like am right now ;)
 
-Currently it seems pretty stable when not using the screen.  This is the default
-in the config (`use_display = False`).
+Currently it seems pretty stable. You have to manually start it though, and I haven't
+tested daemonizing it.
 
-When using the screen I see this error which I need to chase down per 
-[#1](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/1)
 
 ## Hardware
 
@@ -55,6 +53,8 @@ specifying the config included in this repo: `/usr/bin/powermate -c powermate.to
 
 # Releases
 
+* 13 Dec 2019 v0.12 - Add MIN/MAX alerts per [#2](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/2), fix 
+[#1](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/1)
 * 10 Dec 2019 v0.11 - refactor `ssd1306` lib  to `Csd1306` class, simplify calls to same, refactor for cleaner code 
 * 10 Dec 2019 v0.10 - first decently functional code, known issue 
 in [#1](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/1) though.
