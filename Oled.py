@@ -63,7 +63,7 @@ class Oled:
 
         # Draw a black filled box to clear the image.
         self.draw.rectangle((0, 0, self.width, self.height), outline=0, fill=0)
-        self.draw.text((0, top + 10), str(text), font=self.font, fill=255)
+        self.draw.text((0, top), str(text), font=self.font, fill=255)
 
         # Display image.
         self.disp.image(self.image)
