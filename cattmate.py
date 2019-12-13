@@ -1,9 +1,7 @@
-import time, cattmate_config, config, socket, sys, logging
+import time, cattmate_config, config, socket, sys, logging, os
 from Oled import Oled
-from os import system
 import catt.api as cat_api
 from filelock import FileLock
-
 
 def get_volume_from_file():
     lock = FileLock(cattmate_config.volumefile_lock, timeout=1)
@@ -37,18 +35,21 @@ def get_cast_handle(name_or_ip):
 
 
 def main():
+    logging.basicConfig(filename=os.path.dirname(os.path.abspath(__file__)) + "/error.log")
 
     if config.use_display:
         print('Trying to initialize screen on bus /dev/i2c-' + str(config.display_bus))
         try:
             screen = Oled(config.display_bus, config.font_size)
         except FileNotFoundError as e:
-            exit('ERROR Could not access screen. Wrong I2C buss specified? Using /dev/i2c-' + str(config.display_bus))
+            exit('ERROR Could not access screen. Wrong I2C buss in "config.display_bus"? ' + "\n" +
+                 'Using /dev/i2c-' + str(config.display_bus) + "\n" +
+                 'Error: ' + str(e)
+                 )
         except Exception as e:
-            # todo - where does this logging go? what other errors could end up here?
-            logging.exception(e)
+            logging.error(logging.exception(e))
             exit('ERROR Could not access screen: ' + str(e))
-    
+
     # make sure we have a good file and volume
     try:
         volume = get_volume_from_file()
@@ -84,21 +85,30 @@ def main():
             last_volume_update = milli_time()
             need_update = True
             if config.use_display:
-                screen.display(current_volume)
-            _ = system('clear')
+                try:
+                    screen.display(current_volume)
+                except Exception as e:
+                    logging.error(logging.exception(e))
+
+            _ = os.system('clear')
             print(volume)
 
         # wait 400ms since last local volume change before sending update to chromecast
         if need_update & (milli_time() - last_volume_update > 400):
             need_update = False
-            cast.volume(int(volume)/100)
+            cast.volume(int(volume) / 100)
             print('send vol update: ' + str(current_volume))
 
             if config.use_display:
+                try:
+                    screen.display(current_volume + ";)")
+                except Exception as e:
+                    logging.error(logging.exception(e))
                 time.sleep(cattmate_config.refresh_wait)
-                screen.display(current_volume + ' ;)')
-                time.sleep(cattmate_config.refresh_wait)
-                screen.display(current_volume)
+                try:
+                    screen.display(current_volume)
+                except Exception as e:
+                    logging.error(logging.exception(e))
 
         # wait a certain amount of time so we don't over load the system with file reads
         time.sleep(cattmate_config.refresh_wait)

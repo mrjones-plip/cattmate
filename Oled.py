@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import Adafruit_SSD1306
 import os
-from os import system
+from retrying import retry
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -53,6 +53,7 @@ class Oled:
         self.draw.rectangle((-20, -20, self.width, self.height), outline=0, fill=0)
         self.font = ImageFont.truetype(full_path + "Lato-Heavy.ttf", self.font_size)
 
+    @retry()
     def display(self, text):
         # Draw some shapes.
         # First define some constants to allow easy resizing of shapes.

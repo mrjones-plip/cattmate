@@ -2,3 +2,4 @@ catt
 filelock
 Adafruit_SSD1306
 Pillow
+retrying

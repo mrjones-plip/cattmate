@@ -5,3 +5,4 @@ venv
 *.lock
 *.txt
 config.py
+error.log
