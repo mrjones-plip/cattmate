@@ -69,7 +69,10 @@ def main():
         sys.exit("ERROR: Couldn't connect to '" + config.chromecasts[0] + "'. Check config.py and name/IP.")
 
     if config.use_display:
-        screen.display(current_volume)
+        try:
+            screen.display(current_volume)
+        except Exception as e:
+            logging.error(logging.exception(e))
 
     print(current_volume)
 
@@ -90,7 +93,7 @@ def main():
                 except Exception as e:
                     logging.error(logging.exception(e))
 
-            _ = os.system('clear')
+            os.system('clear')
             print(volume)
 
         # wait 400ms since last local volume change before sending update to chromecast
@@ -102,10 +105,7 @@ def main():
             if config.use_display:
                 try:
                     screen.display(current_volume + ";)")
-                except Exception as e:
-                    logging.error(logging.exception(e))
-                time.sleep(cattmate_config.refresh_wait)
-                try:
+                    time.sleep(cattmate_config.refresh_wait)
                     screen.display(current_volume)
                 except Exception as e:
                     logging.error(logging.exception(e))
