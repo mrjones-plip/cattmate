@@ -10,3 +10,5 @@ display_bus = 1
 
 # how big for the font to be on the screen
 font_size = 55
+
+debug = True
