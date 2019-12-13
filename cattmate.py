@@ -33,7 +33,6 @@ def get_cast_handle(name_or_ip):
             cast = cat_api.CattDevice(name=config.chromecasts[0])
     return cast
 
-
 def main():
     logging.basicConfig(filename=os.path.dirname(os.path.abspath(__file__)) + "/error.log")
 
@@ -89,12 +88,32 @@ def main():
             need_update = True
             if config.use_display:
                 try:
-                    screen.display(current_volume)
+
+                    # if above 100 or below 0, briefly show a MAX or MIN
+                    update_file_volume = False
+                    if int(current_volume) < 0:
+                        screen.display('MIN!')
+                        time.sleep(.5)
+                        update_file_volume = '0'
+                        current_volume = '0'
+                    elif int(current_volume) > 100:
+                        screen.display('MAX!')
+                        time.sleep(.5)
+                        update_file_volume = '100'
+                        current_volume = '100'
+
+                    if update_file_volume:
+                        lock = FileLock(cattmate_config.volumefile_lock, timeout=1)
+                        with lock:
+                            open(cattmate_config.volumefile, "w").write(update_file_volume)
+
                 except Exception as e:
                     logging.error(logging.exception(e))
 
             os.system('clear')
             print(volume)
+
+        screen.display(current_volume)
 
         # wait 400ms since last local volume change before sending update to chromecast
         if need_update & (milli_time() - last_volume_update > 400):
