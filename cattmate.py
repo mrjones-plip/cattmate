@@ -1,4 +1,5 @@
-import time, cattmate_config, config, socket, sys, Ssd1306, logging
+import time, cattmate_config, config, socket, sys, logging
+from Oled import Oled
 from os import system
 import catt.api as cat_api
 from filelock import FileLock
@@ -40,7 +41,7 @@ def main():
     if config.use_display:
         print('Trying to initialize screen on bus /dev/i2c-' + str(config.display_bus))
         try:
-            screen = Ssd1306.Ssd1306(config.display_bus, config.font_size)
+            screen = Oled(config.display_bus, config.font_size)
         except FileNotFoundError as e:
             exit('ERROR Could not access screen. Wrong I2C buss specified? Using /dev/i2c-' + str(config.display_bus))
         except Exception as e:
@@ -66,13 +67,8 @@ def main():
     except cat_api.CastError:
         sys.exit("ERROR: Couldn't connect to '" + config.chromecasts[0] + "'. Check config.py and name/IP.")
 
-    # Success! let user know and wait 1 sec so they can read it before we clearing screen
-    print('Started!')
-    time.sleep(1)
-    _ = system('clear')
-
     if config.use_display:
-        screen.display(current_volume, True)
+        screen.display(current_volume)
 
     print(current_volume)
 
