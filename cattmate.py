@@ -1,4 +1,10 @@
-import time, cattmate_config, config, socket, sys, logging, os, glob
+import time, socket, sys, logging, os, glob
+logging.basicConfig(filename=os.path.dirname(os.path.abspath(__file__)) + "/error.log")
+try:
+    import config
+except ModuleNotFoundError as e:
+    logging.error(logging.exception(e))
+    sys.exit("ERROR: Couldn't find file 'config.py'. Did you copy and edit 'config.dist.py' per readme.md?")
 from powermate.powermate import PowerMateBase, LedEvent
 from Oled import Oled
 import catt.api as cat_api
@@ -28,7 +34,6 @@ def get_cast_handle(name_or_ip):
 class cattmate(PowerMateBase):
     def __init__(self, path):
 
-        logging.basicConfig(filename=os.path.dirname(os.path.abspath(__file__)) + "/error.log")
         print('Initializing PowerMate: ' + path)
 
         try:
@@ -52,14 +57,17 @@ class cattmate(PowerMateBase):
             print('Trying to initialize screen on bus /dev/i2c-' + str(config.display_bus))
             try:
                 self.screen = Oled(config.display_bus, config.font_size)
+                self.screen.display(';)')
+                time.sleep(.5)
+                self.screen.display(str(self._volume))
             except FileNotFoundError as e:
-                exit('ERROR Could not access screen. Wrong I2C buss in "config.display_bus"? ' + "\n" +
+                sys.exit('ERROR Could not access screen. Wrong I2C buss in "config.display_bus"? ' + "\n" +
                      'Using /dev/i2c-' + str(config.display_bus) + "\n" +
                      'Error: ' + str(e)
                      )
             except Exception as e:
                 logging.error(logging.exception(e))
-                exit('ERROR Could not access screen: ' + str(e))
+                sys.exit('ERROR Could not access screen: ' + str(e))
         else:
             self.screen = False
 
@@ -73,7 +81,7 @@ class cattmate(PowerMateBase):
 
             if config.use_display:
                 try:
-                    self.screen.display('MUTE')
+                    self.screen.display('mute')
                 except Exception as e:
                     logging.error(logging.exception(e))
             return LedEvent.pulse()
