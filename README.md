@@ -50,10 +50,22 @@ to use an external I2C screen or not
 1. Start the cattmate controller `python3 cattmate.py`
 
 
+## Use
+
+After getting your hardware and software set up per above, cattmate supports:
+* Increase volume - rotate clockwise
+* Decrease volume - rotate counter-clockwise
+* Mute - push down
+* Unmute - push down again
+* Fast Forward - push down and rotate clockwise
+* Rewind - push down and rotate counter-clockwise
+
+
 ## Releases
 
 * 16 Dec 2019 v0.13 - Complete refactor to use native python driver
-per [#8](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/8)
+per [#8](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/8) and add pause, ff & rrwnd per
+  [#10](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/10)
 * 13 Dec 2019 v0.12 - Add MIN/MAX alerts per [#2](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/2), fix 
 [#1](https://github.com/Ths2-9Y-LqJt6/cattmate/issues/1)
 * 10 Dec 2019 v0.11 - refactor `ssd1306` lib  to `Csd1306` class, simplify calls to same, refactor for cleaner code 

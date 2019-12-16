@@ -1,4 +1,5 @@
 import time, socket, sys, logging, os, glob
+
 logging.basicConfig(filename=os.path.dirname(os.path.abspath(__file__)) + "/error.log")
 try:
     import config
@@ -43,7 +44,8 @@ class cattmate(PowerMateBase):
             logging.error(logging.exception(e))
             sys.exit("ERROR: Couldn't connect PowerMate at '" + path +
                      "'. Is it plugged in and is the udev file installed per readme.md?")
-        self._pulsing = False
+        self._muted = False
+        self._paused = False
         self._volume = 20
 
         print('Trying to get handle to Chromecast: ' + config.chromecasts[0])
@@ -62,9 +64,9 @@ class cattmate(PowerMateBase):
                 self.screen.display(str(self._volume))
             except FileNotFoundError as e:
                 sys.exit('ERROR Could not access screen. Wrong I2C buss in "config.display_bus"? ' + "\n" +
-                     'Using /dev/i2c-' + str(config.display_bus) + "\n" +
-                     'Error: ' + str(e)
-                     )
+                         'Using /dev/i2c-' + str(config.display_bus) + "\n" +
+                         'Error: ' + str(e)
+                         )
             except Exception as e:
                 logging.error(logging.exception(e))
                 sys.exit('ERROR Could not access screen: ' + str(e))
@@ -74,8 +76,8 @@ class cattmate(PowerMateBase):
         print('Successfully started!')
 
     def short_press(self):
-        self._pulsing = not self._pulsing
-        if self._pulsing:
+        self._muted = not self._muted
+        if self._muted:
             print('Muted')
             self.cast.volume(0)
 
@@ -96,11 +98,30 @@ class cattmate(PowerMateBase):
             return LedEvent(brightness=self._volume)
 
     def long_press(self):
-        print('Pause?')
+        self._paused = not self._paused
+        if self._paused:
+            print('Paused')
+            self.cast.pause()
+
+            if config.use_display:
+                try:
+                    self.screen.display('pause')
+                except Exception as e:
+                    logging.error(logging.exception(e))
+
+        else:
+            print('Playing')
+            self.cast.play()
+
+            if config.use_display:
+                try:
+                    self.screen.display('play')
+                except Exception as e:
+                    logging.error(logging.exception(e))
 
     def rotate(self, rotation):
         self._volume = max(0, min(MAX_VOLUME, self._volume + rotation))
-        self._pulsing = False
+        self._muted = False
 
         if config.use_display:
             try:
@@ -114,7 +135,23 @@ class cattmate(PowerMateBase):
         return LedEvent(brightness=self._volume)
 
     def push_rotate(self, rotation):
-        print('Push rotate {}!'.format(rotation))
+        if rotation > 0:
+            action = 'ffwd'
+        else:
+            action = 'rrnd'
+
+        if config.use_display:
+            try:
+                self.screen.display(action)
+            except Exception as e:
+                logging.error(logging.exception(e))
+
+        if rotation > 0:
+            self.cast.ffwd(2)
+        else:
+            self.cast.rewind(2)
+
+        print(action)
 
 
 if __name__ == "__main__":
