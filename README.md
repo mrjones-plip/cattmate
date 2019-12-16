@@ -57,6 +57,8 @@ After getting your hardware and software set up per above, cattmate supports:
 * Decrease volume - rotate counter-clockwise
 * Mute - push down
 * Unmute - push down again
+* Pause - push down and hold 1+ second
+* Play - push down and hold 1+ second again
 * Fast Forward - push down and rotate clockwise
 * Rewind - push down and rotate counter-clockwise
 
