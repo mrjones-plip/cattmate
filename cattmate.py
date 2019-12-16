@@ -1,24 +1,21 @@
-import time, cattmate_config, config, socket, sys, logging, os
+import time, socket, sys, logging, os, glob
+logging.basicConfig(filename=os.path.dirname(os.path.abspath(__file__)) + "/error.log")
+try:
+    import config
+except ModuleNotFoundError as e:
+    logging.error(logging.exception(e))
+    sys.exit("ERROR: Couldn't find file 'config.py'. Did you copy and edit 'config.dist.py' per readme.md?")
+from powermate.powermate import PowerMateBase, LedEvent
 from Oled import Oled
 import catt.api as cat_api
-from filelock import FileLock
-
-def get_volume_from_file():
-    lock = FileLock(cattmate_config.volumefile_lock, timeout=1)
-    with lock:
-        volume = open(cattmate_config.volumefile, "r").read().strip()
-    return volume
-
-
-def create_volume_file():
-    lock = FileLock(cattmate_config.volumefile_lock, timeout=1)
-    with lock:
-        open(cattmate_config.volumefile, "w").write(cattmate_config.prototypical_data['volume'])
 
 
 # thanks https://stackoverflow.com/a/5998359
 def milli_time():
     return int(round(time.time() * 1000))
+
+
+MAX_VOLUME = 100
 
 
 def get_cast_handle(name_or_ip):
@@ -33,105 +30,94 @@ def get_cast_handle(name_or_ip):
             cast = cat_api.CattDevice(name=config.chromecasts[0])
     return cast
 
-def main():
-    logging.basicConfig(filename=os.path.dirname(os.path.abspath(__file__)) + "/error.log")
 
-    if config.use_display:
-        print('Trying to initialize screen on bus /dev/i2c-' + str(config.display_bus))
+class cattmate(PowerMateBase):
+    def __init__(self, path):
+
+        print('Initializing PowerMate: ' + path)
+
         try:
-            screen = Oled(config.display_bus, config.font_size)
-        except FileNotFoundError as e:
-            exit('ERROR Could not access screen. Wrong I2C buss in "config.display_bus"? ' + "\n" +
-                 'Using /dev/i2c-' + str(config.display_bus) + "\n" +
-                 'Error: ' + str(e)
-                 )
-        except Exception as e:
+            glob_path = glob.glob(path)[0]
+            super(cattmate, self).__init__(glob_path)
+        except IndexError as e:
             logging.error(logging.exception(e))
-            exit('ERROR Could not access screen: ' + str(e))
+            sys.exit("ERROR: Couldn't connect PowerMate at '" + path +
+                     "'. Is it plugged in and is the udev file installed per readme.md?")
+        self._pulsing = False
+        self._volume = 20
 
-    # make sure we have a good file and volume
-    try:
-        volume = get_volume_from_file()
-    except TypeError:
-        create_volume_file()
-        volume = cattmate_config.prototypical_data['volume']
-
-    # remember current volume and let user know we're starting
-    current_volume = volume
-    last_volume_update = milli_time()
-    need_update = False
-    print('Trying to start with: ' + str(config.chromecasts[0]))
-
-    try:
-        cast = get_cast_handle(config.chromecasts[0])
-    except cat_api.CastError:
-        sys.exit("ERROR: Couldn't connect to '" + config.chromecasts[0] + "'. Check config.py and name/IP.")
-
-    if config.use_display:
+        print('Trying to get handle to Chromecast: ' + config.chromecasts[0])
         try:
-            screen.display(current_volume)
-        except Exception as e:
+            self.cast = get_cast_handle(config.chromecasts[0])
+        except cat_api.CastError as e:
             logging.error(logging.exception(e))
+            sys.exit("ERROR: Couldn't connect to '" + config.chromecasts[0] + "'. Check config.py and name/IP.")
 
-    print(current_volume)
+        if config.use_display:
+            print('Trying to initialize screen on bus /dev/i2c-' + str(config.display_bus))
+            try:
+                self.screen = Oled(config.display_bus, config.font_size)
+                self.screen.display(';)')
+                time.sleep(.5)
+                self.screen.display(str(self._volume))
+            except FileNotFoundError as e:
+                sys.exit('ERROR Could not access screen. Wrong I2C buss in "config.display_bus"? ' + "\n" +
+                     'Using /dev/i2c-' + str(config.display_bus) + "\n" +
+                     'Error: ' + str(e)
+                     )
+            except Exception as e:
+                logging.error(logging.exception(e))
+                sys.exit('ERROR Could not access screen: ' + str(e))
+        else:
+            self.screen = False
 
-    # enter endless loop to check file for volume updates
-    while True:
+        print('Successfully started!')
 
-        # get the volume from the file at the top of the loop
-        volume = get_volume_from_file()
-
-        # if the volume has changed and it's not empty, update chromecast and screen
-        if volume != current_volume and volume:
-            current_volume = volume
-            last_volume_update = milli_time()
-            need_update = True
-            if config.use_display:
-                try:
-
-                    # if above 100 or below 0, briefly show a MAX or MIN
-                    update_file_volume = False
-                    if int(current_volume) < 0:
-                        screen.display('MIN!')
-                        time.sleep(.5)
-                        update_file_volume = '0'
-                        current_volume = '0'
-                    elif int(current_volume) > 100:
-                        screen.display('MAX!')
-                        time.sleep(.5)
-                        update_file_volume = '100'
-                        current_volume = '100'
-
-                    if update_file_volume:
-                        lock = FileLock(cattmate_config.volumefile_lock, timeout=1)
-                        with lock:
-                            open(cattmate_config.volumefile, "w").write(update_file_volume)
-
-                except Exception as e:
-                    logging.error(logging.exception(e))
-
-            os.system('clear')
-            print(volume)
-
-        screen.display(current_volume)
-
-        # wait 400ms since last local volume change before sending update to chromecast
-        if need_update & (milli_time() - last_volume_update > 400):
-            need_update = False
-            cast.volume(int(volume) / 100)
-            print('send vol update: ' + str(current_volume))
+    def short_press(self):
+        self._pulsing = not self._pulsing
+        if self._pulsing:
+            print('Muted')
+            self.cast.volume(0)
 
             if config.use_display:
                 try:
-                    screen.display(current_volume + ";)")
-                    time.sleep(cattmate_config.refresh_wait)
-                    screen.display(current_volume)
+                    self.screen.display('mute')
                 except Exception as e:
                     logging.error(logging.exception(e))
+            return LedEvent.pulse()
+        else:
+            if config.use_display:
+                try:
+                    self.screen.display(str(self._volume))
+                except Exception as e:
+                    logging.error(logging.exception(e))
+            print('Unmuted')
+            self.cast.volume(int(self._volume) / 100)
+            return LedEvent(brightness=self._volume)
 
-        # wait a certain amount of time so we don't over load the system with file reads
-        time.sleep(cattmate_config.refresh_wait)
+    def long_press(self):
+        print('Pause?')
+
+    def rotate(self, rotation):
+        self._volume = max(0, min(MAX_VOLUME, self._volume + rotation))
+        self._pulsing = False
+
+        if config.use_display:
+            try:
+                self.screen.display(str(self._volume))
+            except Exception as e:
+                logging.error(logging.exception(e))
+
+        self.cast.volume(int(self._volume) / 100)
+        print('send vol update: ' + str(self._volume))
+
+        return LedEvent(brightness=self._volume)
+
+    def push_rotate(self, rotation):
+        print('Push rotate {}!'.format(rotation))
 
 
 if __name__ == "__main__":
-    main()
+    print("Trying to start...")
+    pm = cattmate('/dev/input/by-id/*PowerMate*')
+    pm.run()
