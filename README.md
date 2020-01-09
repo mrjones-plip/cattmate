@@ -24,9 +24,9 @@ tested daemonizing it.
 ## Hardware
 
 * Raspbery Pi - I used a [Raspberry Pi Model 3B Rev 1.2](https://amzn.to/2REZXwb)
-* PowerMate - Hopefully you can find one used on eBay if you don't already have one
+* [PowerMate](https://support.griffintechnology.com/product/powermate/) - Hopefully you can [find one used on eBay](https://www.ebay.com/sch/i.html?_nkw=griffin+powermate+usb+-bluetooth) if you don't already have one
 * 0.96" SSD1336 OLED Screen (_optional_) - I use [these from MakerFocus](https://amzn.to/2PKMQqL)
-* Chromecast - any sort will do, original, audio or ultra
+* [Chromecast](https://en.wikipedia.org/wiki/Chromecast) - any sort will do, original, audio or ultra
 
 
 ## Install
