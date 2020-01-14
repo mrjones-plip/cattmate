@@ -1,0 +1,14 @@
+[Unit]
+Description=powermate
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/cattmate
+ExecStart=/usr/bin/python3 -u /home/pi/cattmate/cattmate.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
