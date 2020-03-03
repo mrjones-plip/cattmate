@@ -28,6 +28,8 @@ you don't already have one
 * 0.96" SSD1336 OLED Screen (_optional_) - I use [these from MakerFocus](https://amzn.to/2PKMQqL)
 * [Chromecast](https://en.wikipedia.org/wiki/Chromecast) - any sort will do, original, audio or ultra
 
+If the PowerMate is too escoteric, consider checking out [cattrotar](https://github.com/Ths2-9Y-LqJt6/Cattrotar)! Cattrotar is another Chromecast volume control project, but it uses a cheap, comodity Rotary Encoder instead ([~$2.50/ea](https://amzn.to/2TkCwZf)).
+
 ## Use
 
 Cattmate supports:
