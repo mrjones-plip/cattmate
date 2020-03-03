@@ -78,7 +78,7 @@ for the powermatte - you can unplug and plug and unplug all day and it satisfyin
 # Troubleshooting 
 
 You can debug the system in syslog with `sudo tail -f /var/log/syslog`. I try to do a lot 
-of testing and explicit have `except` errors that expictly tell you what went wrong
+of testing and explicit have `except` errors that explicitly tell you what went wrong
 and how to fix it.  If all else fails, open an issue and I'l try and help ya!
 
 
