@@ -79,7 +79,11 @@ for the powermatte - you can unplug and plug and unplug all day and it satisfyin
 
 You can debug the system in syslog with `sudo tail -f /var/log/syslog`. I try to do a lot 
 of testing and explicit have `except` errors that explicitly tell you what went wrong
-and how to fix it.  If all else fails, open an issue and I'l try and help ya!
+and how to fix it.  
+
+Note that on slower devices, like the Pi 1 that I tested on, startup can take >60sec, so be patient ;)
+
+If all else fails, open an issue and I'l try and help ya!
 
 
 ## Releases
