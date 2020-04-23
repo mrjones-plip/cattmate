@@ -57,7 +57,7 @@ default user with a home directory of `/home/pi` and that you have both
  `git clone https://github.com/Ths2-9Y-LqJt6/cattmate.git /home/pi/cattmate; cd /home/pi/cattmate`
 1. Create your own virtualenv and activate it `python3 -m venv venv;. venv/bin/activate` (_optional_)
 1. Install all the python prerequisites with `pip3 install -r requirements.txt`
-1. Create your own config file `cp config.dist.py config.dist` and edit `config.dist` with 
+1. Create your own config file `cp config.dist.py config.py` and edit `config.py` with 
 the names or IPs
 of the chromecasts you want to use (ony first one supported right now ;) and whether you want
 to use an external I2C screen or not
