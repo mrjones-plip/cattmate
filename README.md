@@ -59,7 +59,7 @@ default user with a home directory of `/home/pi` and that you have both
 1. Install all the python prerequisites with `pip3 install -r requirements.txt`
 1. Create your own config file `cp config.dist.py config.py` and edit `config.py` with 
 the names or IPs
-of the chromecasts you want to use (ony first one supported right now ;) and whether you want
+of the chromecasts you want to use (only first one supported right now ;) and whether you want
 to use an external I2C screen or not
 1. Copy the systemd file into place, reload systemd, start and enable it:
     ```bash
